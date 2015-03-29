@@ -1,0 +1,190 @@
+#   Git İş Akışı
+
+.fx: first
+
+Bengü ÖZCAN `<bengu.ozcan@bil.omu.edu.tr>`
+
+Didem YANARDAĞ `<didem.yanardag@bil.omu.edu.tr>`
+
+Mart 2015
+
+##  Kişisel Kopya Nasıl Yönetilir?
+
+-   İlk olarak ortak çalışılacak repoyu `fork` ediyoruz
+-   Reponun kopyasını makinemize almak için
+
+        !sh
+        $ git clone [url]
+
+-   Yeni bir dal oluşturarak özelliğimizi ekliyoruz
+-   Oluşturduğumuz dalı fork ettiğimiz repomuza yolluyoruz
+-   Katkıların çekilmesi isteği(pull request) ile repo sahibine yolluyoruz
+
+##  En Doğru Commit Yazımı
+
+-   50 ya da daha az karakterden oluşan özet
+-   Özet büyük harfle başlamalı (nokta kullanma)
+-   Değişimin ayrıntılı açıklaması
+-   Özeti, açıklamadan ayıran boş bir satır
+-   Açıklamada satır uzunluğu 72 karakteri geçmemeli
+-   Yeni paragraf yazmak gerektiğinde yine boş bir satır 
+
+##  Örneğin
+
+
+![alt text](/home/bngzcn/folyo/media/commit.png "commit")        
+
+
+##  Commit Mesajını Düzeltme
+
+-   Son commit mesajını düzeltmek için 
+
+        !sh
+        $ git commit --amend -m "Yeni mesaj" 
+
+-   Bu komut ile en son eklenen değişiklik mesajı silinerek yeni mesaj eklenir
+-   Editör ile düzeltme
+	
+        !sh
+        $ git commit --amend
+
+##  Git Kullanım Hataları
+
+-   İsim, soyisim ve email adresi tanımlamalarını yapmamak
+-   Net olmayan, eksik commit mesajları
+-   Birden fazla commit işlemini tek bir commit olarak göndermek
+-   Yanlışlıkla `master` a commit etme
+-   Birden fazla ana işin tek branşta halledilmesi
+-   Conflict(Çakışmalar)
+
+##  Conflict(Çakışmalar)
+
+-   Bazı durumlarda Git `merge` işlemini otomatik olarak gerçekleştiremez
+-   Müdahale ederek hangi değişikliğin nasıl entegre edileceğine karar vermeniz gerekir
+-   Genellikle aynı dosya üzerinde değişiklikler yapıldığında ortaya çıkar
+-   git mergetool, meld, vimdiff, diffuse, diffmerge..
+
+##  Örnek
+	
+        !sh
+
+        here is my readme
+
+        <<<<<<< HEAD
+        the cake is lie.
+        =======
+        the cake is telling the truth!
+        >>>>>>>
+        4e76d3542a7eee02ec516a47600002a90a4e4b48
+
+##  Yeni Özellik Ekleme
+
+-   Yeni özellik için yeni bir dal oluşturulur
+-   Dala geçiş yapılır
+-   Bu dal üzerinde değişiklikler yapılır
+-   Dal çalışır durumda ise `master` dalı ile birleştirilir
+
+##  Hata Düzeltme
+
+-   Yeni bir dal oluşturulur
+-   Dala geçiş yapılır
+-   Hata düzeltmeleri yapılır
+-   Testlerden geçirilerek `master` dalına birleştirilir
+
+##  git rebase
+
+-   İki branchı entegre etmek için kullanılan merge komutuna alternatif bir komut
+-   Dallardaki ortak en son commiti bulur
+-   Ortak sonrasında bir dalda yapılan diğer tüm commitleri geri alır
+-   Tarihsel iz oluşmaz
+
+        !sh
+        $ git checkout <branch_name>
+        $ git rebase <branch_name>
+
+##  Merge-Rebase
+
+![alt text](/home/bngzcn/folyo/media/merge-rebase.png "merge-rebase")        
+
+##  git rebase Tehlikesi
+
+-   Eğer ortak bir repoda çalışıyorsak kullanılmamalı
+-   Conflict durumlarından kaçınılmalı
+ 
+##  git merge --squash
+
+-   Bir özellik dalındaki tüm commitleri tek bir committe birleştirme
+-   History şişmesini engeller
+
+        !sh
+        $ git checkout master
+        $ git merge --squash <branch_name>
+        $ git commit -m '...'
+
+##  Merge- Merge --squash
+
+![alt text](/home/bngzcn/folyo/media/squash.png "merge-squash")        
+
+##  Github İş Akışı
+
+-   Sabit bir `master` dalı 
+-   Kendi özellik dallarınızı oluşturun
+-   Dalı Github projenize gönderin
+-   `Pull Request` açın
+-   Tartışın, isteğe bağlı olarak değişiklik yapmaya devam edin
+-   İstek onaylanırsa `merge` edilir
+-   `master` dalına gönderilir
+
+##  Sabit bir `master` dalı
+
+-   Çalışır durumda tutulmalı
+-   En yeni değişiklikleri içermeli
+-   Geliştirme bu dal üzerinde devam eder
+
+##  Kendi özellik dalınızı oluşturun
+
+-   Geliştirilecek özellikle ilgili bir isim verilmeli
+-   Her bir özellik ve hata düzeltmeleri için ayrı dal oluşturulmalı
+
+
+![alt text](/home/bngzcn/folyo/media/branch.png "Branch")            
+
+
+##  Dalı Github projenize gönderme
+
+-   Uzaktaki yazılım havuzlarından veri almak için
+
+        !sh
+        $ git fetch [uzak-sunucu-adı]
+
+##  `pull request` açın
+
+![alt text](/home/bngzcn/folyo/media/pullrequest.png "pull-request")        
+
+##  İstek onaylanırsa `merge` edilir
+
+-   `pull request` onaylandıktan sonra `merge` yapılır
+ 
+![alt text](/home/bngzcn/folyo/media/merge.png "merge")        
+
+##  `master` dalına gönderilir
+
+-   Her şey kullanıma hazır hale geldiğinde `master` dalına `push` edilebilir
+
+
+##  Kaynakça
+
+-   http://scottchacon.com/2011/08/31/github-flow.html
+-   http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
+-   http://git-scm.com/book/tr/v2
+-   http://www.amiroff.com/blog/en-sik-yapilan-git-kullanim-hatalari-ve-cozum-onerileri/
+-   http://www.iearobotics.com/wiki/index.php?title=Tutorial:_Github_y_Freecad
+
+##  Teşekkürler
+    
+
+    :)
+
+
+
+
